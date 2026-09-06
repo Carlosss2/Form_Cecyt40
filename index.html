@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscripción a Clubs · CECyT 40 «Las Águilas»</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="bg-glow bg-glow-1"></div>
+  <div class="bg-glow bg-glow-2"></div>
+  <div class="bg-grid"></div>
+
+  <header class="topbar">
+    <div class="topbar-inner wrap">
+      <a href="index.html" class="brand">
+        <svg class="crest" viewBox="0 0 96 96" aria-hidden="true">
+          <defs>
+            <linearGradient id="oro" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#ffe9a8"/>
+              <stop offset="50%" stop-color="#f2b90c"/>
+              <stop offset="100%" stop-color="#a87500"/>
+            </linearGradient>
+          </defs>
+          <circle cx="48" cy="48" r="45" fill="none" stroke="url(#oro)" stroke-width="3.5"/>
+          <circle cx="48" cy="48" r="38" fill="none" stroke="url(#oro)" stroke-width="1" opacity=".55"/>
+          <path d="M12 46 Q16 28 32 21 L26 39 Q21 43 12 46 Z" fill="url(#oro)"/>
+          <path d="M84 46 Q80 28 64 21 L70 39 Q75 43 84 46 Z" fill="url(#oro)"/>
+          <path d="M48 18 Q59 23 61 35 L48 44 L35 35 Q37 23 48 18 Z" fill="url(#oro)"/>
+          <path d="M44 30 L47 35 L44 35 Z" fill="#060b16"/>
+          <path d="M52 30 L49 35 L52 35 Z" fill="#060b16"/>
+          <polygon points="40,58 48,52 56,58 54,68 42,68" fill="url(#oro)"/>
+        </svg>
+        <div class="brand-text">
+          <span class="brand-school">CECyT 40 · LAS ÁGUILAS</span>
+          <span class="brand-sub">Centro de Estudios Científicos y Tecnológicos · Chiapas</span>
+        </div>
+      </a>
+      <div class="live-count">
+        <span class="live-dot"></span>
+        <span>Registrados: <strong id="topCount">0</strong> / 226</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap main">
+    <section class="hero">
+      <h1 class="hero-title">Inscripción a <span class="gold">Clubs</span></h1>
+      <p class="hero-sub">Elige tu club y forma parte de las actividades del CECyT 40 «Las Águilas». Elige con confianza: cada club tiene cupo limitado.</p>
+      <div class="hero-stats">
+        <div class="stat-chip"><strong>9</strong> Clubs activos</div>
+        <div class="stat-chip"><strong>23</strong> Alumnos por club</div>
+        <div class="stat-chip"><strong>226</strong> Estudiantes</div>
+      </div>
+    </section>
+
+    <section class="card form-card" id="formCard" aria-live="polite">
+      <div class="stepper">
+        <div class="step done" id="stepDot1">
+          <span class="step-num">1</span>
+          <span class="step-label">Datos del alumno</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" id="stepDot2">
+          <span class="step-num">2</span>
+          <span class="step-label">Elije tu club</span>
+        </div>
+      </div>
+
+      <div id="msgCapacidad" class="md-notice" hidden></div>
+      <div id="msgError" class="md-error" hidden></div>
+
+      <form id="paso1" novalidate>
+        <div class="field-group">
+          <div class="field">
+            <label for="ap">Apellido paterno <em>*</em></label>
+            <input type="text" id="ap" name="ap" autocomplete="family-name" placeholder="Ej. Hernández">
+          </div>
+          <div class="field">
+            <label for="am">Apellido materno <em>*</em></label>
+            <input type="text" id="am" name="am" autocomplete="family-name" placeholder="Ej. López">
+          </div>
+          <div class="field field-full">
+            <label for="nombre">Nombre(s) <em>*</em></label>
+            <input type="text" id="nombre" name="nombre" autocomplete="given-name" placeholder="Ej. José Manuel">
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="field-title">Selecciona tu grupo</span>
+          <div class="pill-group" id="grupoGroup">
+            <button type="button" class="pill" data-value="A">A</button>
+            <button type="button" class="pill" data-value="B">B</button>
+            <button type="button" class="pill" data-value="C">C</button>
+            <button type="button" class="pill" data-value="D">D</button>
+            <button type="button" class="pill" data-value="E">E</button>
+            <button type="button" class="pill" data-value="F">F</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="field-title">Especialidad <em>*</em></span>
+          <div class="pill-group" id="especialidadGroup">
+            <button type="button" class="pill" data-value="Mecatrónica">Mecatrónica</button>
+            <button type="button" class="pill" data-value="Laboratorista Químico">Laboratorista Químico</button>
+            <button type="button" class="pill" data-value="Ventas">Ventas</button>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-gold" id="btnPaso2">Continuar
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </form>
+
+      <form id="paso2" hidden>
+        <p id="saludoClub" class="sub-label"></p>
+        <div class="club-grid" id="clubGrid"></div>
+        <div class="actions actions-between">
+          <button type="button" class="btn btn-ghost" id="btnAtras">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+            Regresar
+          </button>
+          <button type="submit" class="btn btn-gold" id="btnEnviar">Confirmar inscripción
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l14 0M13 6l6 6-6 6"/></svg>
+          </button>
+        </div>
+      </form>
+
+      <section id="confirmacion" class="confirm" hidden>
+        <div class="confirm-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+        </div>
+        <h2 class="confirm-title">¡Inscripción confirmada!</h2>
+        <p class="confirm-sub">Bienvenido, <strong id="confNombre"></strong>. Tu club quedó registrado.</p>
+        <div class="ticket" id="confTicket"></div>
+        <p class="confirm-note">El pase de inscripción se generó correctamente. Guarda tu folio por si lo necesitas.</p>
+        <button type="button" class="btn btn-gold" id="btnOtro">Registrar a otro alumno</button>
+      </section>
+    </section>
+  </main>
+
+  <footer class="footer wrap">
+    <p>CECyT 40 «Las Águilas» · Chiapas</p>
+    <a href="admin.html" class="admin-link">Acceso administrativo</a>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/form.js"></script>
+</body>
+</html>
