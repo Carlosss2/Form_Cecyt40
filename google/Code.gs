@@ -16,8 +16,18 @@ function json(o) {
 
 function doPost(e) {
   const datos = JSON.parse(e.postData.contents);
+  const fila = {
+    id: datos.id || "",
+    apellido_paterno: datos.ap || "",
+    apellido_materno: datos.am || "",
+    nombre: datos.nombre || "",
+    grupo: datos.grupo || "",
+    especialidad: datos.especialidad || "",
+    club: datos.club || "",
+    fecha: datos.fecha || ""
+  };
   const sh = hoja();
-  sh.appendRow(HEADERS.map(h => (datos[h] !== undefined ? datos[h] : "")));
+  sh.appendRow(HEADERS.map(h => fila[h]));
   return json({ ok: true });
 }
 
@@ -28,6 +38,8 @@ function doGet(e) {
   const rows = values.slice(1).map(r => {
     const o = {};
     HEADERS.forEach((h, i) => (o[h] = r[i]));
+    o.ap = o.apellido_paterno;
+    o.am = o.apellido_materno;
     return o;
   });
 
