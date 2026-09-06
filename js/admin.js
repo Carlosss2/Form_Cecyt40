@@ -219,6 +219,45 @@ function normaliza(s) {
   return String(s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 }
 
+/* ---------- Google Sheet ---------- */
+function fetchConTimeout(url, opciones, ms) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), ms || 8000);
+  return fetch(url, Object.assign({}, opciones, { signal: ctrl.signal })).finally(() => clearTimeout(t));
+}
+
+async function sincronizarDesdeHoja() {
+  if (!WAA_URL) return;
+  const btn = document.getElementById("btnSync");
+  btn.disabled = true;
+  btn.textContent = "Sincronizando…";
+  try {
+    const res = await fetchConTimeout(WAA_URL, { method: "GET", redirect: "follow" }, 10000);
+    if (!res.ok) throw new Error("http");
+    const data = await res.json();
+    const filas = (data && data.rows) || [];
+    if (!Array.isArray(filas)) throw new Error("formato");
+
+    const actuales = leerRegistros();
+    const porId = {};
+    actuales.forEach(r => (porId[r.id] = r));
+    let agregados = 0, actualizados = 0;
+    filas.forEach(f => {
+      if (!f || !f.id) return;
+      if (!porId[f.id]) { porId[f.id] = f; agregados++; }
+      else if (f.fecha && f.fecha !== porId[f.id].fecha) { porId[f.id] = f; actualizados++; }
+    });
+    guardarRegistros(Object.values(porId));
+    renderAll();
+    alert("Sincronización completada: " + agregados + " nuevos, " + actualizados + " actualizados.");
+  } catch (e) {
+    alert("No se pudo leer la hoja. Revisa que la URL de la app (WAA_URL) esté configurada y publicada como \"Cualquier persona\".");
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Sincronizar";
+  }
+}
+
 /* ---------- Init ---------- */
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnPin").addEventListener("click", intentarPin);
@@ -237,6 +276,17 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   document.getElementById("busqueda").addEventListener("input", renderTabla);
   document.getElementById("filtroClub").addEventListener("change", renderTabla);
+
+  const btnSheet = document.getElementById("btnSheet");
+  const btnSync = document.getElementById("btnSync");
+  if (SHEET_URL) {
+    btnSheet.hidden = false;
+    btnSheet.addEventListener("click", () => window.open(SHEET_URL, "_blank"));
+  }
+  if (WAA_URL) {
+    btnSync.hidden = false;
+    btnSync.addEventListener("click", sincronizarDesdeHoja);
+  }
 
   if (autenticado) { desbloquear(); renderAll(); }
   else bloquear();

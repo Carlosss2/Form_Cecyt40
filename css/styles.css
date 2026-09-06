@@ -308,6 +308,16 @@ input[type="text"]:focus {
 .confirm-sub { color: var(--muted); margin-top: 8px; font-size: .95rem; }
 .confirm-sub strong { color: var(--text); }
 .confirm-note { color: var(--muted); font-size: .8rem; margin: 18px 0 22px; }
+.sync-note {
+  margin: 14px auto 0;
+  max-width: 430px;
+  font-size: .78rem;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(39, 209, 127, .35);
+  background: rgba(39, 209, 127, .08);
+  color: #7fe3b2;
+}
 
 .ticket {
   margin: 22px auto 0;

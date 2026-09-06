@@ -7,6 +7,39 @@ function guardarRegistros(lista) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(lista));
 }
 
+function fetchConTimeout(url, opciones, ms) {
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), ms || 6000);
+  return fetch(url, Object.assign({}, opciones, { signal: ctrl.signal })).finally(() => clearTimeout(t));
+}
+
+async function sincronizarConHoja(nuevo) {
+  if (!WAA_URL) return false;
+  try {
+    await fetchConTimeout(WAA_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(nuevo),
+      redirect: "follow"
+    }, 8000);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+async function conteoRealEnHoja(idClub) {
+  if (!WAA_URL) return null;
+  try {
+    const res = await fetchConTimeout(WAA_URL + "?accion=conteos", { method: "GET", redirect: "follow" }, 5000);
+    if (!res.ok) return null;
+    const data = await res.json();
+    return (data.conteos && data.conteos[idClub]) || 0;
+  } catch (e) {
+    return null;
+  }
+}
+
 function contarPorClub() {
   const conteo = {};
   CLUBS.forEach(c => conteo[c.id] = 0);
@@ -154,16 +187,19 @@ function irPaso2() {
   document.getElementById("btnEnviar").innerHTML = "Confirmar inscripción <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12l14 0M13 6l6 6-6 6\"/></svg>";
 }
 
-function registrar() {
+async function registrar() {
   if (!state.club) return msgError("Selecciona un club para continuar.");
 
-  const registros = leerRegistros();
-  const enClub = registros.filter(r => r.club === state.club).length;
+  let enClub = leerRegistros().filter(r => r.club === state.club).length;
+
+  const enHoja = await conteoRealEnHoja(state.club);
+  if (enHoja !== null) enClub = enHoja;
+
   if (enClub >= LIMITE_CLUB) {
     renderizarClubes();
     return msgError("Ese club ya alcanzó su cupo de " + LIMITE_CLUB + " alumnos. Elige otro.");
   }
-  if (registros.length >= TOTAL_ALUMNOS) return msgError("Los 226 lugares ya fueron ocupados.");
+  if (leerRegistros().length >= TOTAL_ALUMNOS) return msgError("Los 226 lugares ya fueron ocupados.");
 
   const id = "C40-" + String(Date.now()).slice(-8) + "-" + Math.floor(Math.random() * 90 + 10);
   const nuevo = {
@@ -177,10 +213,12 @@ function registrar() {
     fecha: new Date().toISOString()
   };
 
+  const registros = leerRegistros();
   registros.push(nuevo);
   guardarRegistros(registros);
 
-  mostrarConfirmacion(nuevo);
+  const envio = await sincronizarConHoja(nuevo);
+  mostrarConfirmacion(nuevo, envio);
   actualizarContador();
   limpiar();
 }
@@ -191,13 +229,23 @@ function limpiar() {
   document.querySelectorAll(".pill.selected").forEach(p => p.classList.remove("selected"));
 }
 
-function mostrarConfirmacion(r) {
+function mostrarConfirmacion(r, envio) {
   const club = CLUBS.find(c => c.id === r.club) || {};
   document.getElementById("paso1").hidden = true;
   document.getElementById("paso2").hidden = true;
   document.getElementById("confirmacion").hidden = false;
   document.getElementById("stepDot2").classList.add("done");
   document.getElementById("confNombre").textContent = r.nombre + " " + r.ap + " " + r.am;
+
+  const estadoSync = document.getElementById("syncEstado");
+  if (WAA_URL) {
+    estadoSync.hidden = false;
+    estadoSync.textContent = envio
+      ? "Tu registro se envió a la plataforma oficial."
+      : "Registro guardado en este equipo. Se intentará enviar a la plataforma oficial cuando haya conexión.";
+  } else {
+    estadoSync.hidden = true;
+  }
 
   const fecha = new Date(r.fecha).toLocaleString("es-MX", { dateStyle: "long", timeStyle: "short" });
   document.getElementById("confTicket").innerHTML =

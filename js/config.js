@@ -3,6 +3,9 @@ const LIMITE_CLUB = 26;
 const TOTAL_ALUMNOS = 226;
 const ADMIN_PIN = "aguilas40";
 
+const WAA_URL = "";
+const SHEET_URL = "";
+
 const CLUBS = [
   { id: "robotica", nombre: "Robótica", meta: "Construcción y programación de robots" },
   { id: "radio", nombre: "Radio CECyT", meta: "Locución, producción y transmisión en vivo" },
