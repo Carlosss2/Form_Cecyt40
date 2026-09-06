@@ -3,8 +3,8 @@ const LIMITE_CLUB = 26;
 const TOTAL_ALUMNOS = 226;
 const ADMIN_PIN = "aguilas40";
 
-const WAA_URL = "";
-const SHEET_URL = "";
+const WAA_URL = "https://script.google.com/macros/s/AKfycbzlnKIF17e6iqAJSQuxqQq-TsUXg8fWPIDgfUaoDsGuezcIBH8O_QWSaFzpNC0s5u7c9A/exec";
+const SHEET_URL = "https://docs.google.com/spreadsheets/d/17QVmzXZ3NBLVqYMRZUpsh39ZqhBGmiKDp-XzmgaKy3U/edit?usp=sharing";
 
 const CLUBS = [
   { id: "robotica", nombre: "Robótica", meta: "Construcción y programación de robots" },
