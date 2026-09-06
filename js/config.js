@@ -1,5 +1,5 @@
 const STORAGE_KEY = "cecyt40_registros";
-const LIMITE_CLUB = 23;
+const LIMITE_CLUB = 26;
 const TOTAL_ALUMNOS = 226;
 const ADMIN_PIN = "aguilas40";
 
