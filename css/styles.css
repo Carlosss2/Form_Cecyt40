@@ -224,6 +224,15 @@ input[type="text"]:focus {
 .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 14px 34px -8px rgba(242, 185, 12, .7); }
 .btn-gold:active { transform: translateY(0); }
 .btn-gold:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+.btn .spinner {
+  width: 17px; height: 17px;
+  border: 2.5px solid rgba(26, 19, 0, .3);
+  border-top-color: #1a1300;
+  border-radius: 50%;
+  animation: spin .6s linear infinite;
+  flex: none;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 .btn-ghost {
   color: var(--muted);
   background: rgba(255, 255, 255, .04);

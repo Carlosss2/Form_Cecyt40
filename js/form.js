@@ -28,13 +28,13 @@ async function sincronizarConHoja(nuevo) {
   }
 }
 
-async function conteoRealEnHoja(idClub) {
+async function conteoRealTodos() {
   if (!WAA_URL) return null;
   try {
     const res = await fetchConTimeout(WAA_URL + "?accion=conteos", { method: "GET", redirect: "follow" }, 5000);
     if (!res.ok) return null;
     const data = await res.json();
-    return (data.conteos && data.conteos[idClub]) || 0;
+    return data.conteos || null;
   } catch (e) {
     return null;
   }
@@ -113,8 +113,14 @@ function inicializarPills() {
   });
 }
 
-function renderizarClubes() {
-  const conteo = contarPorClub();
+function renderizarClubes(conteoServer) {
+  const conteoLocal = contarPorClub();
+  const conteo = {};
+  CLUBS.forEach(c => {
+    const server = conteoServer ? (conteoServer[c.id] || 0) : null;
+    const local = conteoLocal[c.id] || 0;
+    conteo[c.id] = server !== null ? Math.max(server, local) : local;
+  });
   const grid = document.getElementById("clubGrid");
   grid.innerHTML = "";
 
@@ -154,7 +160,7 @@ function renderizarClubes() {
 }
 
 /* ---------- Flujo ---------- */
-function irPaso2() {
+async function irPaso2() {
   const ap = document.getElementById("ap").value.trim();
   const am = document.getElementById("am").value.trim();
   const nombre = document.getElementById("nombre").value.trim();
@@ -183,23 +189,39 @@ function irPaso2() {
     state.especialidad + ". Elige un club:";
 
   state.club = "";
-  renderizarClubes();
+  const conteoServer = await conteoRealTodos();
+  renderizarClubes(conteoServer);
   document.getElementById("btnEnviar").innerHTML = "Confirmar inscripción <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12l14 0M13 6l6 6-6 6\"/></svg>";
+  document.getElementById("btnEnviar").disabled = false;
+  document.getElementById("paso1").disabled = true;
 }
 
 async function registrar() {
   if (!state.club) return msgError("Selecciona un club para continuar.");
 
+  const btnEnviar = document.getElementById("btnEnviar");
+  if (btnEnviar.disabled) return;
+  btnEnviar.disabled = true;
+  btnEnviar.innerHTML = '<span class="spinner"></span> Procesando...';
+
   let enClub = leerRegistros().filter(r => r.club === state.club).length;
 
-  const enHoja = await conteoRealEnHoja(state.club);
-  if (enHoja !== null) enClub = enHoja;
+  const conteoServer = await conteoRealTodos();
+  if (conteoServer) {
+    enClub = Math.max(enClub, conteoServer[state.club] || 0);
+  }
 
   if (enClub >= LIMITE_CLUB) {
-    renderizarClubes();
+    renderizarClubes(conteoServer);
+    btnEnviar.disabled = false;
+    btnEnviar.innerHTML = "Confirmar inscripción <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12l14 0M13 6l6 6-6 6\"/></svg>";
     return msgError("Ese club ya alcanzó su cupo de " + LIMITE_CLUB + " alumnos. Elige otro.");
   }
-  if (leerRegistros().length >= TOTAL_ALUMNOS) return msgError("Los 226 lugares ya fueron ocupados.");
+  if (leerRegistros().length >= TOTAL_ALUMNOS) {
+    btnEnviar.disabled = false;
+    btnEnviar.innerHTML = "Confirmar inscripción <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12l14 0M13 6l6 6-6 6\"/></svg>";
+    return msgError("Los 226 lugares ya fueron ocupados.");
+  }
 
   const id = "C40-" + String(Date.now()).slice(-8) + "-" + Math.floor(Math.random() * 90 + 10);
   const nuevo = {
@@ -269,13 +291,22 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnAtras").addEventListener("click", () => {
     document.getElementById("paso2").hidden = true;
     document.getElementById("confirmacion").hidden = true;
+    document.getElementById("paso1").disabled = false;
     document.getElementById("paso1").hidden = false;
     document.querySelector(".step-line").classList.add("empty");
     document.querySelector(".step-line").classList.remove("fill");
     document.getElementById("stepDot1").classList.remove("done");
   });
   document.getElementById("btnOtro").addEventListener("click", () => {
+    limpiar();
+    document.getElementById("paso2").hidden = true;
     document.getElementById("confirmacion").hidden = true;
+    document.getElementById("paso1").disabled = false;
+    document.getElementById("paso1").hidden = false;
+    document.querySelector(".step-line").classList.add("empty");
+    document.querySelector(".step-line").classList.remove("fill");
+    document.getElementById("stepDot1").classList.remove("done");
+    document.getElementById("stepDot2").classList.remove("done");
     document.getElementById("formCard").scrollIntoView({ behavior: "smooth" });
   });
 });
