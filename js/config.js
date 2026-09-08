@@ -14,5 +14,5 @@ const CLUBS = [
   { id: "dibujo", nombre: "Dibujo y Pintura", meta: "Arte, trazo y color en una misma clase" },
   { id: "deportes", nombre: "Deportes", meta: "Activación física y competencia" },
   { id: "teatro", nombre: "Teatro Musical", meta: "Actuación, canto y danza" },
-  { id: "juegos", nombre: "Juegos de Mesa", meta: "Ajedrez, dominó, gato fractal y cubo Rubik" }
+  { id: "juegos", nombre: "Club de Razonamiento, Lógica y Estrategia", meta: "Ajedrez, dominó, gato fractal y cubo Rubik" }
 ];
