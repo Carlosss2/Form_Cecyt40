@@ -1,5 +1,5 @@
 const STORAGE_KEY = "cecyt40_registros";
-const LIMITE_CLUB = 26;
+const LIMITE_CLUB = 30;
 const TOTAL_ALUMNOS = 226;
 const ADMIN_PIN = "aguilas40";
 
@@ -13,7 +13,6 @@ const CLUBS = [
   { id: "oratoria", nombre: "Oratoria", meta: "Expresión oral y debate · 50 min" },
   { id: "dibujo", nombre: "Dibujo y Pintura", meta: "Arte, trazo y color en una misma clase" },
   { id: "deportes", nombre: "Deportes", meta: "Activación física y competencia" },
-  { id: "senas", nombre: "Lengua de Señas Mexicanas", meta: "Horario: 12:30 a 14:00 hrs" },
   { id: "teatro", nombre: "Teatro Musical", meta: "Actuación, canto y danza" },
   { id: "juegos", nombre: "Juegos de Mesa", meta: "Ajedrez, dominó, gato fractal y cubo Rubik" }
 ];

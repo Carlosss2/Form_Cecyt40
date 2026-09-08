@@ -4,7 +4,7 @@ Inscripción a clubs para alumnos del CECyT 40 «Las Águilas» (Chiapas).
 
 - Formulario público: `index.html`
 - Panel administrativo: `admin.html` (PIN: `aguilas40`)
-- Cupo de **26 alumnos por club**.
+- Cupo de **30 alumnos por club**.
 - Los registros se guardan en el navegador (localStorage) y, si configuras Google Sheets, también se envían a tu hoja en tiempo real.
 
 ## Conexión a Google Sheets (para ver los datos en tu equipo)
@@ -24,4 +24,4 @@ Inscripción a clubs para alumnos del CECyT 40 «Las Águilas» (Chiapas).
 
 Desde ese momento, cada alumno que se registre aparecerá en tu Google Sheet al instante. Ahí puedes verla y exportarla a Excel (Archivo → Descargar → xlsx). En el panel admin también hay botones **Abrir Google Sheet** y **Sincronizar**.
 
-> Nota: el cupo de 26 por club se verifica contra la hoja antes de cada registro cuando `WAA_URL` está configurado; de lo contrario solo cuenta los registros del dispositivo actual.
+> Nota: el cupo de 30 por club se verifica contra la hoja antes de cada registro cuando `WAA_URL` está configurado; de lo contrario solo cuenta los registros del dispositivo actual.
