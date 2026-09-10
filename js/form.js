@@ -65,7 +65,7 @@ function actualizarContador() {
     document.getElementById("paso2").hidden = true;
   } else if ((TOTAL_ALUMNOS - n) <= 15) {
     notice.hidden = false;
-    notice.innerHTML = "Quedan <strong>" + (TOTAL_ALUMNOS - n) + " lugares</strong> disponibles de 226. ¡Apresúrate!";
+    notice.innerHTML = "Quedan <strong>" + (TOTAL_ALUMNOS - n) + " lugares</strong> disponibles de " + TOTAL_ALUMNOS + ". ¡Apresúrate!";
   } else {
     notice.hidden = true;
   }
@@ -220,7 +220,7 @@ async function registrar() {
   if (leerRegistros().length >= TOTAL_ALUMNOS) {
     btnEnviar.disabled = false;
     btnEnviar.innerHTML = "Confirmar inscripción <svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 12l14 0M13 6l6 6-6 6\"/></svg>";
-    return msgError("Los 226 lugares ya fueron ocupados.");
+    return msgError("Los " + TOTAL_ALUMNOS + " lugares ya fueron ocupados.");
   }
 
   const id = "C40-" + String(Date.now()).slice(-8) + "-" + Math.floor(Math.random() * 90 + 10);
