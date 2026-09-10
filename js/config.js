@@ -1,6 +1,6 @@
 const STORAGE_KEY = "cecyt40_registros";
 const LIMITE_CLUB = 30;
-const TOTAL_ALUMNOS = 226;
+const TOTAL_ALUMNOS = 240;
 const ADMIN_PIN = "aguilas40";
 
 const WAA_URL = "https://script.google.com/macros/s/AKfycbzlnKIF17e6iqAJSQuxqQq-TsUXg8fWPIDgfUaoDsGuezcIBH8O_QWSaFzpNC0s5u7c9A/exec";

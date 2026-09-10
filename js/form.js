@@ -60,7 +60,7 @@ function actualizarContador() {
   const formCard = document.getElementById("formCard");
   if (n >= TOTAL_ALUMNOS) {
     notice.hidden = false;
-    notice.innerHTML = "Los <strong>226 cupos</strong> han sido ocupados. La inscripción está cerrada por hoy.";
+    notice.innerHTML = "Los <strong>" + TOTAL_ALUMNOS + " cupos</strong> han sido ocupados. La inscripción está cerrada por hoy.";
     document.getElementById("paso1").hidden = true;
     document.getElementById("paso2").hidden = true;
   } else if ((TOTAL_ALUMNOS - n) <= 15) {
